@@ -1,7 +1,7 @@
 {
   "name": "びすこリーグ予想",
   "short_name": "予想",
-  "start_url": "/predict.html",
+  "start_url": "./predict.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
