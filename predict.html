@@ -15,6 +15,89 @@ iframe{width:100%;height:100%;border:none}
 </head>
 
 <body>
-<iframe src="https://script.google.com/macros/s/AKfycbx18EK4B292PbYw24a9tkr2W-tcoLg7SBn-GHWgoKlCBPL8Yl3PyV751J-_rsuIRA4/exec"></iframe>
+
+<div id="splash">
+  <img src="icon-predict.png" id="logo">
+  <div id="loader">
+    <div id="bar"></div>
+  </div>
+</div>
+
+<iframe id="main"
+src="https://script.google.com/macros/s/AKfycbx18EK4B292PbYw24a9tkr2W-tcoLg7SBn-GHWgoKlCBPL8Yl3PyV751J-_rsuIRA4/exec">
+</iframe>
+
+<style>
+html,body{
+  margin:0;
+  height:100%;
+  background:#1c1c1e; /* 黒に近いグレー */
+  font-family:sans-serif;
+}
+
+iframe{
+  width:100%;
+  height:100%;
+  border:none;
+  display:none;
+}
+
+#splash{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:#1c1c1e;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+#logo{
+  width:120px;
+  opacity:0;
+  transform:scale(0.9);
+  animation: logoFade 1.2s ease forwards;
+}
+
+@keyframes logoFade{
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+#loader{
+  width:60%;
+  height:4px;
+  background:#2c2c2e;
+  margin-top:40px;
+  border-radius:4px;
+  overflow:hidden;
+}
+
+#bar{
+  width:0%;
+  height:100%;
+  background:#ffffff;
+  animation: loadBar 1.5s ease forwards;
+}
+
+@keyframes loadBar{
+  to{
+    width:100%;
+  }
+}
+</style>
+
+<script>
+window.onload = function(){
+  setTimeout(function(){
+    document.getElementById("splash").style.display="none";
+    document.getElementById("main").style.display="block";
+  },1600);
+}
+</script>
+
 </body>
 </html>
