@@ -1,223 +1,205 @@
+
+{
+  "name": "びすこリーグ管理",
+  "short_name": "管理",
+  "start_url": "./admin.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "icon-admin.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-admin.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
+{
+  "name": "びすこリーグ予想",
+  "short_name": "予想",
+  "start_url": "./predict.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "icon-predict.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-predict.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>掲載順予想</title>
+
+<link rel="manifest" href="manifest-predict.json">
+<link rel="icon" href="icon-predict.png">
+
+<style>
+html,body{
+  margin:0;
+  height:100%;
+  background:#ffffff;
+  overflow:hidden;
+  font-family:sans-serif;
+}
+
+/* ===== スプラッシュ ===== */
+#splash{
+  position:fixed;
+  inset:0;
+  background:#ffffff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  transition:opacity 0.6s ease;
+}
+
+/* ロゴサイズ */
+#logo-anim{
+  position:relative;
+  width:800px;
+  height:800px;
+  max-width:90vw;
+  max-height:90vw;
+}
+
+/* 全パーツ共通 */
+.part{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  opacity:0;
+  filter:drop-shadow(0 10px 25px rgba(0,0,0,0.08));
+}
+
+/* ===== アニメーション ===== */
+
+/* 左L 下から */
+.leftL{
+  animation:leftIn 0.8s ease forwards;
+}
+
+/* 3 上から */
+.three{
+  animation:threeIn 0.8s ease 0.6s forwards;
+}
+
+/* 右青L ふわっと */
+.rightL{
+  animation:rightIn 0.8s ease 1.3s forwards;
+}
+
+/* 文字 横展開 */
+.text{
+  transform:scaleX(0);
+  transform-origin:left center;
+  animation:textExpand 0.8s cubic-bezier(.65,0,.35,1) 1.8s forwards;
+}
+
+@keyframes leftIn{
+  from{transform:translateY(80px);opacity:0;}
+  to{transform:translateY(0);opacity:1;}
+}
+
+@keyframes threeIn{
+  from{transform:translateY(-80px);opacity:0;}
+  to{transform:translateY(0);opacity:1;}
+}
+
+@keyframes rightIn{
+  from{opacity:0;transform:scale(0.9);}
+  to{opacity:1;transform:scale(1);}
+}
+
+@keyframes textExpand{
+  to{opacity:1;transform:scaleX(1);}
+}
+
+/* ===== メイン表示 ===== */
+#main{
+  width:100%;
+  height:100%;
+  border:none;
+  opacity:0;
+  transition:opacity 0.6s ease;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== スプラッシュ ===== -->
+<div id="splash">
+  <div id="logo-anim">
+    <img src="blueL-left.svg" class="part leftL">
+    <img src="three.svg" class="part three">
+    <img src="blueL-right.svg" class="part rightL">
+    <img src="text.svg" class="part text">
+  </div>
+</div>
+
+<!-- ===== GASサイト ===== -->
+<iframe id="main"
+src="https://script.google.com/macros/s/AKfycbx18EK4B292PbYw24a9tkr2W-tcoLg7SBn-GHWgoKlCBPL8Yl3PyV751J-_rsuIRA4/exec">
+</iframe>
+
+<script>
+window.addEventListener("load",()=>{
+  setTimeout(()=>{
+    const splash = document.getElementById("splash");
+    const main = document.getElementById("main");
+
+    splash.style.opacity = "0";
+
+    setTimeout(()=>{
+      splash.style.display = "none";
+      main.style.opacity = "1";
+    },600);
+
+  },3000);
+});
+</script>
+
+</body>
+</html>
+
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>JUMP予想アプリ</title>
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-  <style>
-    :root { 
-      --main-blue: #007aff; /* 画像のような鮮やかな水色 */
-      --bg-gray: #f2f2f7;   /* iOS風の背景色 */
-      --card-bg: #ffffff;
-      --tab-bg: #1c1c1e;    /* ボトムナビの背景色（画像準拠） */
-      --header-bg: #007aff; /* ヘッダーの青 */
-    }
-    
-    body { font-family: -apple-system, "Helvetica Neue", sans-serif; background: var(--bg-gray); margin: 0; padding-bottom: 90px; }
-    .hidden { display: none !important; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>びすこリーグ管理</title>
 
-    /* ヘッダーデザイン（画像2枚目・4枚目準拠） */
-    .app-header {
-      background: var(--header-bg);
-      padding: 15px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: sticky; top: 0; z-index: 1000;
-      height: 60px;
-    }
-    .header-user-pill {
-      background: rgba(0,0,0,0.3);
-      color: white;
-      padding: 8px 30px;
-      border-radius: 30px;
-      border: 1px solid rgba(255,255,255,0.5);
-      font-size: 1.1rem;
-      font-weight: bold;
-    }
-    .notice-btn {
-      position: absolute; right: 15px;
-      width: 32px; height: 32px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .notice-btn img { width: 20px; height: 20px; filter: invert(1); }
+<link rel="manifest" href="manifest-admin.json">
+<link rel="apple-touch-icon" href="icon-admin.png">
+<meta name="theme-color" content="#000000">
 
-    /* ホーム画面のカードデザイン（画像4枚目準拠） */
-    .home-card {
-      background: #c2dfff; /* お知らせ部分の薄い水色 */
-      border-radius: 30px;
-      margin: 20px;
-      padding: 25px;
-      border: 2px solid var(--main-blue);
-      min-height: 150px;
-    }
-    .status-card {
-      background: white;
-      border-radius: 30px;
-      margin: 20px;
-      padding: 0;
-      overflow: hidden;
-      border: 1px solid #ccc;
-      text-align: center;
-    }
-    .status-main { padding: 20px; }
-    .status-sub { background: #f9f9f9; padding: 10px; border-top: 1px solid #eee; font-size: 0.85rem; }
-
-    /* マイページ（画像3枚目準拠） */
-    .section-title { padding: 10px 20px; color: #8e8e93; font-size: 0.9rem; }
-    .list-group { background: white; border-top: 1px solid #d1d1d6; border-bottom: 1px solid #d1d1d6; }
-    .list-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 20px; border-bottom: 1px solid #d1d1d6; font-size: 1rem;
-    }
-    .list-item:last-child { border-bottom: none; }
-    .list-label { font-weight: bold; color: #333; }
-    .list-value { color: #8e8e93; }
-    .logout-btn-wrap { text-align: center; margin-top: 30px; }
-    .logout-btn {
-      display: inline-block;
-      border: 2px solid #ff3b30; color: #ff3b30;
-      padding: 10px 50px; border-radius: 30px;
-      font-weight: bold; font-size: 1.2rem; background: white;
-    }
-
-    /* ボトムナビゲーション（画像1,2,4枚目準拠） */
-    .bottom-nav {
-      position: fixed; bottom: 0; width: 100%; height: 75px;
-      background: var(--tab-bg); display: flex; justify-content: space-around;
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-    .nav-item {
-      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      color: #8e8e93; text-decoration: none; font-size: 10px; font-weight: bold;
-    }
-    .nav-item.active { color: var(--main-blue); }
-    .nav-item img { width: 28px; height: 28px; margin-bottom: 4px; filter: grayscale(1) brightness(1.5); }
-    .nav-item.active img { filter: none; } /* アクティブ時はそのまま（水色）表示 */
-
-    /* 統計テーブル */
-    .scroll-x { overflow-x: auto; padding: 0 10px; }
-    .data-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.8rem; }
-    .data-table th, .data-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-  </style>
+<style>
+html,body{margin:0;height:100%}
+iframe{width:100%;height:100%;border:none}
+</style>
 </head>
+
 <body>
-
-<div id="app-section">
-  <header class="app-header">
-    <div class="header-user-pill" id="headerName">のじを。さん</div>
-    <div class="notice-btn" onclick="alert('お知らせはありません')">
-      <img id="img-notice" src="" alt="notice">
-    </div>
-  </header>
-
-  <div id="page-home" class="page active">
-    <div class="home-card" id="newsContent">ここにお知らせを表示します。</div>
-    <div class="status-card">
-      <div class="status-main">
-        <h2 id="issueText" style="margin:0;">15号</h2>
-        <div id="submitStatus" style="font-size:1.5rem; color:#ff3b30; font-weight:bold; margin:10px 0;">未提出</div>
-      </div>
-      <div class="status-sub" id="eventStatus">第五回びすこリーグ予選:未参加</div>
-    </div>
-  </div>
-
-  <div id="page-mypage" class="page">
-    <div class="section-title">ユーザー情報</div>
-    <div class="list-group">
-      <div class="list-item"><span class="list-label">ユーザー名</span><span class="list-value" id="infoName">のじを。</span></div>
-      <div class="list-item"><span class="list-label">ユーザーID</span><span class="list-value">U_0000</span></div>
-      <div class="list-item"><span class="list-label">パスワード</span><span class="list-value">nojiwo.</span></div>
-      <div class="list-item"><span class="list-label">秘密のキーワード</span><span class="list-value">カグラバチ</span></div>
-      <div class="list-item" onclick="goPastScores()" style="cursor:pointer;">
-        <span class="list-label">過去の成績</span><span class="list-value">＞</span>
-      </div>
-    </div>
-    <div class="logout-btn-wrap">
-      <button class="logout-btn" onclick="logout()">ログアウト</button>
-    </div>
-  </div>
-
-  <div id="page-data" class="page">
-    <div class="scroll-x">
-      <table class="data-table">
-        <thead id="statsHead"></thead>
-        <tbody id="statsBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <nav class="bottom-nav">
-    <div class="nav-item active" onclick="switchTab('page-home', this)">
-      <img class="icon-svg" data-src="icon-home.svg"><span>Home</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('page-league', this)">
-      <img class="icon-svg" data-src="icon-league.svg"><span>League</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('page-data', this)">
-      <img class="icon-svg" data-src="icon-data.svg"><span>Data</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('page-qna', this)">
-      <img class="icon-svg" data-src="icon-q&a.svg"><span>Q&A</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('page-mypage', this)">
-      <img class="icon-svg" data-src="icon-mypage.svg"><span>My Page</span>
-    </div>
-  </nav>
-</div>
-
-<script>
-  // ★ここにあなたのGitHubのRawパスを入れてください
-  const GITHUB_BASE = "https://raw.githubusercontent.com/あなたのユーザー名/リポジトリ名/main/";
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbxRrdI7fetm8f18TzwMu5I4nRhSn4JqiUYvHGgXSo4BHtHHeObycQevz9__39bskNxB7Q/exec";
-
-  // アイコン読み込み
-  function loadIcons() {
-    document.querySelectorAll('.icon-svg').forEach(img => {
-      img.src = GITHUB_BASE + img.dataset.src;
-    });
-    document.getElementById('img-notice').src = GITHUB_BASE + "icon-notice.svg";
-  }
-
-  window.onload = () => {
-    loadIcons();
-    loadStats(); // Dataタブ用の統計を初期読み込み
-  };
-
-  function switchTab(pId, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(pId).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    el.classList.add('active');
-  }
-
-  // 統計を表示する関数 (Dataタブ用)
-  async function loadStats() {
-    try {
-      const resp = await fetch(`${GAS_URL}?func=getStatsTable`);
-      const data = await resp.json();
-      const head = document.getElementById('statsHead');
-      const body = document.getElementById('statsBody');
-      
-      // テーブル生成ロジック（簡略化）
-      head.innerHTML = `<tr><th>作品名</th><th>平均</th></tr>`;
-      body.innerHTML = data.stats.map(s => `<tr><td>${s.title}</td><td>${s.average}</td></tr>`).join('');
-    } catch(e) {
-      console.error("統計読み込み失敗", e);
-    }
-  }
-
-  function logout() {
-    if(confirm("ログアウトしますか？")) {
-      localStorage.clear();
-      location.reload();
-    }
-  }
-</script>
+<iframe src="https://script.google.com/macros/s/AKfycbx18EK4B292PbYw24a9tkr2W-tcoLg7SBn-GHWgoKlCBPL8Yl3PyV751J-_rsuIRA4/exec?mode=admin"></iframe>
 </body>
 </html>
